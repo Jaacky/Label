@@ -21,9 +21,7 @@ function createFolder(folderName, tabs, labelFlag) {
 			},
 			function(newFolder){
 				for (i=0; i < tabs.length; i++) {
-					window.console.log(tabs[i].url);
-					var url = tabs[i].url;
-					html += tabs[i].url + "</br>";
+					addBookmark(newFolder, tabs[i]);
 				}
 			}
 		);
@@ -64,12 +62,18 @@ function getAllLabels() {
 	});
 }
 
-/*function createLabel() {
-	var tabLabel = $('#tabLabel').val();
-	window.console.log("Input in label field: " + !!tabLabel);
-	window.console.log("The label name is: " + tabLabel);
-	createFolder(tabLabel, true);
-}*/
+function addBookmark(labelNode, tab) {
+	chrome.bookmarks.create(
+		{
+			'parentId' : labelNode.id,
+			'title' :  tab.title,
+			'url' : tab.url
+		},
+		function() {
+			console.log(tab.title + " bookmark created!");
+		}
+	);
+}
 
 function createBookmark(urlString) {
 
@@ -85,9 +89,9 @@ function tabItClick() {
 		//createLabel();
 
 		// Get label value
-		var tabLabel = $('tabLabel').val();
+		var tabLabel = $('#tabLabel').val();
 		createFolder(tabLabel, tabs, true);
-		console.log(tabLabel);
+		window.console.log(tabLabel);
 
 		html = "";
 		for (i=0; i < tabs.length; i++) {
