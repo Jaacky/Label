@@ -1,0 +1,28 @@
+.popup {
+	padding: 5px;
+}
+
+.popup > div {
+	margin-top: 5px;
+}
+
+#status {
+	/* avoid an excessively wide status text */
+	white-space: pre;
+	text-overflow: ellipsis;
+	min-width: 250px;
+	max-width: 400px;
+}
+
+#tabItButton {
+	width: 100%;
+	font-size: 18px;
+	border-radius: 5px;
+	border: none;
+	background-color: #dfdfdf;
+	padding: 5px;
+}
+
+#currentLabels {
+	width: 100%;
+}
