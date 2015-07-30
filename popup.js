@@ -115,8 +115,7 @@ function listTabUrls(callback) {
 document.addEventListener('DOMContentLoaded', function() {
 
   listTabUrls(function(num) {
-    renderStatus('There are this many tabs open: ' + num);
-
+    renderStatus('There are ' + num + ' many tabs open.');
   });
   /*getCurrentTabUrl(function(url) {
     // Put the image URL in Google search.
@@ -141,5 +140,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });*/
 
-  
+
 });
