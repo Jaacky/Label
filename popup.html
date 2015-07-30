@@ -12,14 +12,9 @@
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
       }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        /*overflow: hidden;*/
-        max-width: 400px;
-      }
     </style>
+
+    <link rel="stylesheet" href="styles.css">
 
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
@@ -32,18 +27,20 @@
     <script src="script.js"></script>
   </head>
   <body>
-    <div>
-      Current labels:</br>
-      <select id="currentLabels"></select>
-    </div>
-    <div id="status"></div>
-    <div id="bookmarks"></div>
-    <img id="image-result" hidden>
+    <div class="popup">
+      <button id="tabItButton">Tab it!</button>
+      <div id="status"></div>
+      <div>
+        Current labels:</br>
+        <select id="currentLabels"></select>
+      </div>
+      <div id="bookmarks"></div>
+      <img id="image-result" hidden>
 
-    <div id="tabLabelContainer"><input id="tabLabel" type="test" /></div>
-    <div id="tabIt"></div>
-    <button id="tabItButton">Tab it!</button>
-    <button id="clearTabIt">Clear TabIt</button>
+      <div id="tabLabelContainer"><input id="tabLabel" type="test" /></div>
+      <div id="tabIt"></div>
+      <button id="clearTabIt">Clear TabIt</button>
+    </div>
   </body>
 </html>
 
