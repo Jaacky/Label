@@ -28,14 +28,16 @@
   </head>
   <body>
     <div class="popup">
-      <div id="tabLabelContainer"><input id="tabLabel" placeholder="Label Name" /></div>
-      <button id="tabItButton">Tab it!</button>
-      <div id="status"></div>
-      <div>
+      <div class="row" id="tabLabelContainer"><input id="tabLabel" placeholder="Label Name" /></div>
+      <div class="row"><button id="tabItButton">Tab it!</button></div>
+      <div class="row" id="status"></div>
+      <div class="row">
         <select id="currentLabels"></select>
       </div>
-      <button id="openLabel">Open Label</button>
-      <button id="clearTabIt">Clear TabIt</button>
+      <div class="row">
+        <button class="col col-2" id="openLabel">Open Label</button>
+        <button class="col col-2" id="clearTabIt">Clear TabIt</button>
+      </div>
     </div>
   </body>
 </html>
