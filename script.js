@@ -4,7 +4,7 @@ function alertIt() {
   window.console.log("Button clicked");
 }
 
-function createFolder(folderName, tabs, labelFlag) {
+function createFolder(_callback, folderName, tabs, labelFlag) {
 
 	if (labelFlag === undefined) { // labelFlag was not passed and so creating TabIt folder
 		chrome.bookmarks.create(
@@ -23,12 +23,15 @@ function createFolder(folderName, tabs, labelFlag) {
 				for (i=0; i < tabs.length; i++) {
 					addBookmark(newFolder, tabs[i]);
 				}
+				_callback();
 			}
 		);
 	}
 
 	window.console.log(folderName + " folder created");
 }
+
+// Need to recheck if it still runs properly when no TabIt is found
 
 function checkTabIt(callback) {
 	chrome.bookmarks.search(
@@ -38,7 +41,7 @@ function checkTabIt(callback) {
 		function(result) {
 			//window.console.log("The length of TabIt is " + result.length);
 			if (!result.length) {
-				createFolder("TabIt");
+				createFolder(function(){}, "TabIt");
 			}
 
 			tabItID = result[0].id;
@@ -51,6 +54,8 @@ function checkTabIt(callback) {
 
 function getAllLabels() {
 	var labelNames = [];
+	$('#currentLabels').empty();
+	$('#currentLabels').append('<option value="" disabled selected>Current Labels</option>');
 	chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
 		var tabItSubFolders = tabItTree[0].children;
 		for (i=0; i < tabItSubFolders.length; i++) {
@@ -75,9 +80,6 @@ function addBookmark(labelNode, tab) {
 	);
 }
 
-function createBookmark(urlString) {
-
-}
 
 function tabItClick() {
 	var queryInfo = {
@@ -89,8 +91,15 @@ function tabItClick() {
 		//createLabel();
 
 		// Get label value
-		var tabLabel = $('#tabLabel').val();
-		createFolder(tabLabel, tabs, true);
+		var tabLabel;
+		if ($('#tabLabel').val()) {
+			tabLabel = $('#tabLabel').val();
+		} else {
+			var now = new Date();
+			tabLabel = now.toLocaleTimeString() + now.toLocaleDateString();
+		}
+		console.log("tabLabel: " + tabLabel);
+		createFolder(getAllLabels, tabLabel, tabs, true);
 		window.console.log(tabLabel);
 
 		html = "";
@@ -100,7 +109,8 @@ function tabItClick() {
 			html += tabs[i].url + "</br>";
 		}
 		//window.console.log("html is " + html);
-		addToPopup(html);
+		//addToPopup(html);
+		addToPopup("Tabs saved to " + tabLabel);
 
 	});
 
