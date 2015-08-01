@@ -31,6 +31,19 @@ function createFolder(_callback, folderName, tabs, labelFlag) {
 	window.console.log(folderName + " folder created");
 }
 
+function addBookmark(labelNode, tab) {
+	chrome.bookmarks.create(
+		{
+			'parentId' : labelNode.id,
+			'title' :  tab.title,
+			'url' : tab.url
+		},
+		function() {
+			//console.log(tab.title + " bookmark created!");
+		}
+	);
+}
+
 function checkTabIt(callback) {
 	chrome.bookmarks.search(
 		{'title': "TabIt",
@@ -51,31 +64,17 @@ function checkTabIt(callback) {
 function getAllLabels() {
 	var labelNames = [];
 	$('#currentLabels').empty();
-	$('#currentLabels').append('<option value="" disabled selected>Current Labels</option>');
+	$('#currentLabels').append('<option value="" disabled>Current Labels</option>');
 	chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
 		var tabItSubFolders = tabItTree[0].children;
 		for (i=0; i < tabItSubFolders.length; i++) {
 			chrome.bookmarks.get(tabItSubFolders[i].id, function(folders) {
 				console.log(folders[0].title);
-				$('#currentLabels').append('<option value="' + folders[0].title + '">' + folders[0].title + '</option>')
+				$('#currentLabels').append('<option class="labelOptions" id="label' + folders[0].id + '" value="' + folders[0].title + '">' + folders[0].title + '</option>')
 			});
 		}
 	});
 }
-
-function addBookmark(labelNode, tab) {
-	chrome.bookmarks.create(
-		{
-			'parentId' : labelNode.id,
-			'title' :  tab.title,
-			'url' : tab.url
-		},
-		function() {
-			//console.log(tab.title + " bookmark created!");
-		}
-	);
-}
-
 
 function tabItClick() {
 	var queryInfo = {
@@ -106,8 +105,35 @@ function clearTabItClick() {
 		for (i=0; i < tabItSubFolders.length; i++) {
 			chrome.bookmarks.removeTree(tabItSubFolders[i].id);
 		}
+		getAllLabels();
 	});
 	updateStatus('Removed all TabIt labels and bookmarks');
+}
+
+function openLabel() {
+	if ($('#currentLabels option:selected').val()) {
+		var label = $('#currentLabels option:selected').val();
+		var labelID = $('#currentLabels option:selected').attr('id');
+		var id = labelID.substring(5);
+
+		chrome.bookmarks.getChildren(id, function(result) {
+			var tabs = []
+			for (var i=0; i<result.length; i++) {
+				tabs.push(result[i].url);
+			}
+			chrome.windows.create({url : tabs});
+		});
+	} else {
+		updateStatus('Please choose a label to open.');
+	}
+}
+
+function findLabel(id, label) {
+	chrome.bookmarks.getChildren(id,
+		function(result) {
+			console.log('Result length: ' + result.length);
+			chrome.windows.create();
+	});
 }
 
 function updateStatus(string) {
@@ -116,6 +142,15 @@ function updateStatus(string) {
 
 $(document).ready(function() {
 	checkTabIt(getAllLabels);
-	document.getElementById('tabItButton').addEventListener('click', tabItClick);
-	document.getElementById('clearTabIt').addEventListener('click', clearTabItClick);
+	//document.getElementById('tabItButton').addEventListener('click', tabItClick);
+	//document.getElementById('clearTabIt').addEventListener('click', clearTabItClick);
+	$('#tabItButton').click(function() {
+		tabItClick();
+	});
+	$('#clearTabIt').click(function() {
+		clearTabItClick();
+	});
+	$('#openLabel').click(function() {
+		openLabel();
+	});
 });
