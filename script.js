@@ -31,21 +31,17 @@ function createFolder(_callback, folderName, tabs, labelFlag) {
 	window.console.log(folderName + " folder created");
 }
 
-// Need to recheck if it still runs properly when no TabIt is found
-
 function checkTabIt(callback) {
 	chrome.bookmarks.search(
 		{'title': "TabIt",
 		 'url': null
 		},
 		function(result) {
-			//window.console.log("The length of TabIt is " + result.length);
 			if (!result.length) {
 				createFolder(function(){}, "TabIt");
 			}
 
 			tabItID = result[0].id;
-			//window.console.log("The id of TabIt is " + tabItID);
 			console.log(typeof tabItID);
 			callback();
 		}
@@ -75,7 +71,7 @@ function addBookmark(labelNode, tab) {
 			'url' : tab.url
 		},
 		function() {
-			console.log(tab.title + " bookmark created!");
+			//console.log(tab.title + " bookmark created!");
 		}
 	);
 }
@@ -88,8 +84,6 @@ function tabItClick() {
 
 	chrome.tabs.query(queryInfo, function(tabs) {
 
-		//createLabel();
-
 		// Get label value
 		var tabLabel;
 		if ($('#tabLabel').val()) {
@@ -100,40 +94,11 @@ function tabItClick() {
 		}
 		console.log("tabLabel: " + tabLabel);
 		createFolder(getAllLabels, tabLabel, tabs, true);
-		window.console.log(tabLabel);
 
-		html = "";
-		for (i=0; i < tabs.length; i++) {
-			//window.console.log(tabs[i].url);
-			var url = tabs[i].url;
-			html += tabs[i].url + "</br>";
-		}
-		//window.console.log("html is " + html);
-		//addToPopup(html);
-		addToPopup("Tabs saved to " + tabLabel);
+		updateStatus("Tabs saved to " + tabLabel);
 
 	});
-
-	//$('#tabIt').html("<h1>open!</h1>");
 }
-
-function addToPopup(string) {
-	$('#tabIt').html(string);
-}
-
-function tabIt() {
-	var queryInfo = {
-	    currentWindow: true
-  	};
-
-	chrome.tabs.query(queryInfo, function(tabs) {
-
-	    var length = tabs.length;
-	    console.log(length);
-	    callback(length);
-	});
-}
-
 
 function clearTabItClick() {
 	chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
@@ -142,9 +107,11 @@ function clearTabItClick() {
 			chrome.bookmarks.removeTree(tabItSubFolders[i].id);
 		}
 	});
-	addToPopup('');
-	renderStatus('Removed all tab it folders');
-	window.console.log("Removed all subfolders of TabIt");
+	updateStatus('Removed all TabIt labels and bookmarks');
+}
+
+function updateStatus(string) {
+	$('#status').html(string);
 }
 
 $(document).ready(function() {

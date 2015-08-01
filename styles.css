@@ -41,7 +41,7 @@
 
 #currentLabels {
 	width: 100%;
-	font-size: 16px;
-	padding: 5px;
-	
+	font-size: 20px;
+	line-height:40px;
+	height: 40px;
 }
