@@ -2,13 +2,13 @@
   "manifest_version": 2,
 
   "name": "TabIt",
-  "description": "This extension shows a Google Image search result for the current page",
+  "description": "Extension to save all the open tabs in your window for a later time",
   "version": "1.0",
 
   "browser_action": {
     "default_icon": "TabIt_128.png",
     "default_popup": "popup.html",
-    "default_title": "Click here!"
+    "default_title": "TabIt"
   },
 
   "background": {

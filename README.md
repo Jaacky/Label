@@ -1,2 +1,2 @@
 # TabIt
-Google Chrome extension for saving all the tabs open in your window for a later time
+Google Chrome extension to save all the open tabs in your window for a later time
