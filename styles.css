@@ -2,6 +2,12 @@
 	padding: 5px;
 }
 
+/* 
+	Light green: bfff8c 
+	Dark green: #6fbf30
+	Red: #ff8c8c;
+*/
+
 .row {
 	width: 100%;
 	margin-top: 10px;
@@ -33,8 +39,16 @@ button {
 	font-size: 18px;
 	border: none;
 	border-radius: 5px;
-	background-color: #dfdfdf;
+	background-color: #bfff8c;
 	padding: 5px;
+}
+
+.btn-green {
+	background-color: #bfff8c;
+}
+
+.btn-red {
+	background-color: #ff8c8c;
 }
 
 #status {
@@ -43,6 +57,7 @@ button {
 	text-overflow: ellipsis;
 	min-width: 250px;
 	max-width: 400px;
+	font-size: 12px;
 }
 
 #tabLabelContainer {
@@ -59,6 +74,11 @@ button {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	border-radius: 5px;
+	border: 2px solid #bfff8c;
+}
+
+#tabLabel:focus {
+	outline: none;
 }
 
 #tabItButton {
@@ -66,7 +86,6 @@ button {
 	font-size: 18px;
 	border-radius: 5px;
 	border: none;
-	background-color: #dfdfdf;
 	padding: 5px;
 }
 
