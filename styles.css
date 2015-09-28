@@ -1,3 +1,36 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.mask {
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.75);
+	text-align: center;
+}
+
+.maskedText {
+	color: white;
+	font-size: 16px;
+}
+
+.confirmDeleteContainer {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+#confirmDeleteLabel {
+	/*position: relative;
+	top: 50%;
+	transform: translateY(-50%);*/
+}
+
 .popup {
 	padding: 5px;
 }

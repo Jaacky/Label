@@ -100,6 +100,10 @@ function tabItClick() {
 }
 
 function clearTabItClick() {
+
+}
+
+function TOTALclearTabItClick() {
 	chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
 		var tabItSubFolders = tabItTree[0].children;
 		for (i=0; i < tabItSubFolders.length; i++) {
@@ -108,6 +112,27 @@ function clearTabItClick() {
 		getAllLabels();
 	});
 	updateStatus('Removed all TabIt labels and bookmarks');
+}
+
+function deleteLabel() {
+	if ($('#currentLabels option:selected').val()) {
+		$('#labelName').html($('#currentLabels option:selected').val());
+		$('.mask').css('display', 'block');
+	} else {
+		updateStatus('Please choose a label to delete.');
+	}
+}
+
+function confirmDeleteLabel() {
+	console.log("deleteing");
+	var label = $('#currentLabels option:selected').val();
+	var labelID = $('#currentLabels option:selected').attr('id');
+	var id = labelID.substring(5);
+
+	chrome.bookmarks.getSubTree(id, function(selectedLabelTree) {
+		console.log(selectedLabelTree);
+	});
+
 }
 
 function openLabel() {
@@ -152,5 +177,11 @@ $(document).ready(function() {
 	});
 	$('#openLabel').click(function() {
 		openLabel();
+	});
+	$('#deleteLabel').click(function() {
+		deleteLabel();
+	});
+	$('#confirmDeleteLabel').click(function() {
+		confirmDeleteLabel();
 	});
 });

@@ -30,13 +30,19 @@
     <div class="popup">
       <div class="row" id="tabLabelContainer"><input id="tabLabel" placeholder="Label Name" /></div>
       <div class="row"><button class="btn-green" id="tabItButton">Tab it!</button></div>
-      <div class="row" id="status"></div>
       <div class="row">
         <select id="currentLabels"></select>
       </div>
       <div class="row">
         <button class="col col-2 btn-green" id="openLabel">Open Label</button>
-        <button class="col col-2 btn-red" id="clearTabIt">Clear TabIt</button>
+        <button class="col col-2 btn-red" id="deleteLabel">Delete Label</button>
+      </div>
+      <div class="row" id="status"></div>
+    </div>
+    <div class="mask">
+      <div class="row confirmDeleteContainer">
+        <p class="maskedText">Delete <span id="labelName"></span> and its contents</p>
+        <button class="btn-red" id="confirmDeleteLabel">Delete label</button>
       </div>
     </div>
   </body>
