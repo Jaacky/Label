@@ -64,7 +64,7 @@ function checkTabIt(callback) {
 function getAllLabels() {
 	var labelNames = [];
 	$('#currentLabels').empty();
-	$('#currentLabels').append('<option value="" disabled>Current Labels</option>');
+	$('#currentLabels').append('<option selected value="" disabled>Current Labels</option>');
 	chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
 		var tabItSubFolders = tabItTree[0].children;
 		for (i=0; i < tabItSubFolders.length; i++) {
@@ -91,10 +91,11 @@ function tabItClick() {
 			var now = new Date();
 			tabLabel = now.toLocaleTimeString() + now.toLocaleDateString();
 		}
+		$('#tabLabel').val("");
 		console.log("tabLabel: " + tabLabel);
 		createFolder(getAllLabels, tabLabel, tabs, true);
 
-		updateStatus("Tabs saved to " + tabLabel);
+		updateStatus("Tabs saved to " + tabLabel + ".");
 
 	});
 }
@@ -129,8 +130,10 @@ function confirmDeleteLabel() {
 	var labelID = $('#currentLabels option:selected').attr('id');
 	var id = labelID.substring(5);
 
-	chrome.bookmarks.getSubTree(id, function(selectedLabelTree) {
-		console.log(selectedLabelTree);
+	chrome.bookmarks.removeTree(id, function() {
+		updateStatus('Deleted ' + label + ".");
+		getAllLabels();
+		$('.mask').css('display', 'none');
 	});
 
 }
