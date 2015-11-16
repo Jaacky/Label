@@ -39,11 +39,17 @@
 	Light green: bfff8c 
 	Dark green: #6fbf30
 	Red: #ff8c8c;
+
+	NEW COLOURS:
+	light green: #b2ff59
+	dark green: #c0dfd9;
+	dark: #3b3a36;
+	deep orange: #ff5722;
 */
 
 .row {
 	width: 100%;
-	margin-top: 10px;
+	margin-top: 5px;
 	font-size: 0;
 }
 
@@ -72,12 +78,12 @@ button {
 	font-size: 18px;
 	border: none;
 	border-radius: 5px;
-	background-color: #bfff8c;
+	background-color: #b2ff59;
 	padding: 5px;
 }
 
 .btn-green {
-	background-color: #bfff8c;
+	background-color: #b2ff59;
 }
 
 .btn-red {
@@ -94,9 +100,11 @@ button {
 }
 
 #tabLabelContainer {
-	width: 100%;
 	font-size: 16px;
-	margin-bottom:5px;
+	width: 70%;
+	box-sizing: border-box;
+	padding-right: 5px;
+	display: inline-block;
 }
 
 #tabLabel {
@@ -107,7 +115,7 @@ button {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	border-radius: 5px;
-	border: 2px solid #bfff8c;
+	border: 2px solid #b2ff59;
 }
 
 #tabLabel:focus {
@@ -120,6 +128,8 @@ button {
 	border-radius: 5px;
 	border: none;
 	padding: 5px;
+	width: 30%;
+	display: inline-block;
 }
 
 #currentLabels {
