@@ -80,24 +80,24 @@ function tabItClick() {
 	var queryInfo = {
 	    currentWindow: true
   	};
+  	checkTabIt(function() {
+  		chrome.tabs.query(queryInfo, function(tabs) {
+			// Get label value
+			var tabLabel;
+			if ($('#tabLabel').val()) {
+				tabLabel = $('#tabLabel').val();
+			} else {
+				var now = new Date();
+				tabLabel = now.toLocaleTimeString() + now.toLocaleDateString();
+			}
+			$('#tabLabel').val("");
+			console.log("tabLabel: " + tabLabel);
+			createFolder(getAllLabels, tabLabel, tabs, true);
 
-	chrome.tabs.query(queryInfo, function(tabs) {
+			updateStatus("Tabs saved to " + tabLabel + ".");
 
-		// Get label value
-		var tabLabel;
-		if ($('#tabLabel').val()) {
-			tabLabel = $('#tabLabel').val();
-		} else {
-			var now = new Date();
-			tabLabel = now.toLocaleTimeString() + now.toLocaleDateString();
-		}
-		$('#tabLabel').val("");
-		console.log("tabLabel: " + tabLabel);
-		createFolder(getAllLabels, tabLabel, tabs, true);
-
-		updateStatus("Tabs saved to " + tabLabel + ".");
-
-	});
+		});
+  	});
 }
 
 function clearTabItClick() {
@@ -169,7 +169,8 @@ function updateStatus(string) {
 }
 
 $(document).ready(function() {
-	checkTabIt(getAllLabels);
+	console.log(chrome);
+	// checkTabIt(getAllLabels);
 	//document.getElementById('tabItButton').addEventListener('click', tabItClick);
 	//document.getElementById('clearTabIt').addEventListener('click', clearTabItClick);
 	$('#tabItButton').click(function() {
