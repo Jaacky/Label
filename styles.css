@@ -105,6 +105,8 @@ button {
 	box-sizing: border-box;
 	padding-right: 5px;
 	display: inline-block;
+
+	padding-right: 0;
 }
 
 #tabLabel {
@@ -116,6 +118,12 @@ button {
 	box-sizing: border-box;
 	border-radius: 5px;
 	border: 2px solid #b2ff59;
+
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border: 1px solid #ccc;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+
 }
 
 #tabLabel:focus {
@@ -130,6 +138,11 @@ button {
 	padding: 5px;
 	width: 30%;
 	display: inline-block;
+
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border: 1px solid #ccc;
+	line-height: 1;
 }
 
 #currentLabels {
