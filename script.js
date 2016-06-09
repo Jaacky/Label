@@ -64,16 +64,20 @@ function checkTabIt(callback) {
 function getAllLabels() {
 	var labelNames = [];
 	$('#currentLabels').empty();
-	$('#currentLabels').append('<option selected value="" disabled>Current Labels</option>');
-	chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
-		var tabItSubFolders = tabItTree[0].children;
-		for (i=0; i < tabItSubFolders.length; i++) {
-			chrome.bookmarks.get(tabItSubFolders[i].id, function(folders) {
-				console.log(folders[0].title);
-				$('#currentLabels').append('<option class="labelOptions" id="label' + folders[0].id + '" value="' + folders[0].title + '">' + folders[0].title + '</option>')
-			});
-		}
-	});
+	if (tabItID == undefined) {
+		$('#currentLabels').append('<option selected value="" disabled>No Labels</option>');
+	} else {
+		$('#currentLabels').append('<option selected value="" disabled>Current Labels</option>');
+		chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
+			var tabItSubFolders = tabItTree[0].children;
+			for (i=0; i < tabItSubFolders.length; i++) {
+				chrome.bookmarks.get(tabItSubFolders[i].id, function(folders) {
+					console.log(folders[0].title);
+					$('#currentLabels').append('<option class="labelOptions" id="label' + folders[0].id + '" value="' + folders[0].title + '">' + folders[0].title + '</option>')
+				});
+			}
+		});
+	}
 }
 
 function tabItClick() {
@@ -170,9 +174,11 @@ function updateStatus(string) {
 
 $(document).ready(function() {
 	console.log(chrome);
-	// checkTabIt(getAllLabels);
+	checkTabIt(getAllLabels);
 	//document.getElementById('tabItButton').addEventListener('click', tabItClick);
 	//document.getElementById('clearTabIt').addEventListener('click', clearTabItClick);
+	// getAllLabels();
+	
 	$('#tabItButton').click(function() {
 		tabItClick();
 	});
