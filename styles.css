@@ -35,8 +35,8 @@
 	padding: 5px;
 }
 
-/* 
-	Light green: bfff8c 
+/*
+	Light green: bfff8c
 	Dark green: #6fbf30
 	Red: #ff8c8c;
 
@@ -59,7 +59,7 @@
 
 .col {
 	display: inline-block;
-	font-size: 16px;	
+	font-size: 16px;
 }
 
 .col-2 {
@@ -135,13 +135,13 @@ button {
 	font-size: 18px;
 	border-radius: 5px;
 	border: none;
-	padding: 5px;
+	padding: 6px; /* 1 extra padding for missing border */
 	width: 30%;
 	display: inline-block;
 
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
-	border: 1px solid #ccc;
+	/*border: 1px solid #ccc;*/
 	line-height: 1;
 }
 
@@ -150,4 +150,10 @@ button {
 	font-size: 20px;
 	line-height:40px;
 	height: 40px;
+}
+
+.divider {
+	margin-top: 15px;
+	padding-top: 10px;
+	border-top: 1px solid #c8c8c8;
 }
