@@ -1,22 +1,19 @@
-var tabItID;
-
-function alertIt() {
-  window.console.log("Button clicked");
-}
+var labelID;
 
 function createFolder(_callback, folderName, tabs, labelFlag) {
 
-	if (labelFlag === undefined) { // labelFlag was not passed and so creating TabIt folder
+	if (labelFlag === undefined) { // labelFlag was not passed and so creating Label folder
 		chrome.bookmarks.create(
 			{'title': folderName},
 			function(newFolder) {
-
+        labelID = newFolder.id;
+        _callback();
 			}
 		);
-	} else { // labelFlag was passed and so create folder with TabIt folder as parent
+	} else { // labelFlag was passed and so create folder with Label folder as parent
 		chrome.bookmarks.create(
 			{
-				'parentId': tabItID,
+				'parentId': labelID,
 				'title': folderName
 			},
 			function(newFolder){
@@ -28,7 +25,7 @@ function createFolder(_callback, folderName, tabs, labelFlag) {
 		);
 	}
 
-	window.console.log(folderName + " folder created");
+	// window.console.log(folderName + " folder created");
 }
 
 function addBookmark(labelNode, tab) {
@@ -44,18 +41,15 @@ function addBookmark(labelNode, tab) {
 	);
 }
 
-function checkTabIt(callback) {
+function checkLabel(callback) {
 	chrome.bookmarks.search(
-		{'title': "TabIt",
-		 'url': null
-		},
+		{ 'title': "Label", 'url': null },
 		function(result) {
 			if (!result.length) {
-				createFolder(function(){}, "TabIt");
+				createFolder(callback, "Label");
+        return;
 			}
-
-			tabItID = result[0].id;
-			console.log(typeof tabItID);
+			labelID = result[0].id;
 			callback();
 		}
 	);
@@ -64,64 +58,62 @@ function checkTabIt(callback) {
 function getAllLabels() {
 	var labelNames = [];
 	$('#currentLabels').empty();
-	if (tabItID == undefined) {
-		$('#currentLabels').append('<option selected value="" disabled>No Labels</option>');
-	} else {
-		$('#currentLabels').append('<option selected value="" disabled>Current Labels</option>');
-		chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
-			var tabItSubFolders = tabItTree[0].children;
-			for (i=0; i < tabItSubFolders.length; i++) {
-				chrome.bookmarks.get(tabItSubFolders[i].id, function(folders) {
-					console.log(folders[0].title);
+	chrome.bookmarks.getSubTree(labelID, function(labelTree) {
+		var labelSubFolders = labelTree[0].children;
+    if (labelSubFolders.length == 0) {
+  		$('#currentLabels').append('<option selected value="" disabled>No Labels</option>');
+    } else {
+      $('#currentLabels').append('<option selected value="" disabled>Current Labels</option>');
+      for (i=0; i < labelSubFolders.length; i++) {
+				chrome.bookmarks.get(labelSubFolders[i].id, function(folders) {
 					$('#currentLabels').append('<option class="labelOptions" id="label' + folders[0].id + '" value="' + folders[0].title + '">' + folders[0].title + '</option>')
 				});
 			}
-		});
-	}
+    }
+	});
 }
 
-function tabItClick() {
+function addLabelClick() {
 	var queryInfo = {
 	    currentWindow: true
   	};
-  	checkTabIt(function() {
+  	checkLabel(function() {
   		chrome.tabs.query(queryInfo, function(tabs) {
 			// Get label value
-			var tabLabel;
-			if ($('#tabLabel').val()) {
-				tabLabel = $('#tabLabel').val();
+			var labelName;
+
+			if ($('#labelName').val()) {
+				labelName = $('#labelName').val();
 			} else {
 				var now = new Date();
-				tabLabel = now.toLocaleTimeString() + now.toLocaleDateString();
+				labelName = now.toLocaleTimeString() + now.toLocaleDateString();
 			}
-			$('#tabLabel').val("");
-			console.log("tabLabel: " + tabLabel);
-			createFolder(getAllLabels, tabLabel, tabs, true);
+			$('#labelName').val("");
+			createFolder(getAllLabels, labelName, tabs, true);
 
-			updateStatus("Tabs saved to " + tabLabel + ".");
+			updateStatus("Tabs saved to " + labelName + ".");
 
 		});
   	});
 }
 
-function clearTabItClick() {
-
-}
-
-function TOTALclearTabItClick() {
-	chrome.bookmarks.getSubTree(tabItID, function(tabItTree) {
-		var tabItSubFolders = tabItTree[0].children;
-		for (i=0; i < tabItSubFolders.length; i++) {
-			chrome.bookmarks.removeTree(tabItSubFolders[i].id);
+/*
+  NOT USED, used to completely erase the label folder
+*/
+function TOTALclearLabelClick() {
+	chrome.bookmarks.getSubTree(labelID, function(labelTree) {
+		var labelSubFolders = labelTree[0].children;
+		for (i=0; i < labelSubFolders.length; i++) {
+			chrome.bookmarks.removeTree(labelSubFolders[i].id);
 		}
 		getAllLabels();
 	});
-	updateStatus('Removed all TabIt labels and bookmarks');
+	updateStatus('Removed all label bookmarks');
 }
 
 function deleteLabel() {
 	if ($('#currentLabels option:selected').val()) {
-		$('#labelName').html($('#currentLabels option:selected').val());
+		$('#maskLabelName').html($('#currentLabels option:selected').val());
 		$('.mask').css('display', 'block');
 	} else {
 		updateStatus('Please choose a label to delete.');
@@ -129,7 +121,6 @@ function deleteLabel() {
 }
 
 function confirmDeleteLabel() {
-	console.log("deleteing");
 	var label = $('#currentLabels option:selected').val();
 	var labelID = $('#currentLabels option:selected').attr('id');
 	var id = labelID.substring(5);
@@ -163,7 +154,7 @@ function openLabel() {
 function findLabel(id, label) {
 	chrome.bookmarks.getChildren(id,
 		function(result) {
-			console.log('Result length: ' + result.length);
+			// console.log('Result length: ' + result.length);
 			chrome.windows.create();
 	});
 }
@@ -173,17 +164,10 @@ function updateStatus(string) {
 }
 
 $(document).ready(function() {
-	console.log(chrome);
-	checkTabIt(getAllLabels);
-	//document.getElementById('tabItButton').addEventListener('click', tabItClick);
-	//document.getElementById('clearTabIt').addEventListener('click', clearTabItClick);
-	// getAllLabels();
-	
-	$('#tabItButton').click(function() {
-		tabItClick();
-	});
-	$('#clearTabIt').click(function() {
-		clearTabItClick();
+	checkLabel(getAllLabels);
+
+	$('#addLabelButton').click(function() {
+		addLabelClick();
 	});
 	$('#openLabel').click(function() {
 		openLabel();
