@@ -30,10 +30,14 @@
 	padding: 2px 6px;
 }
 
-.confirmDeleteContainer, .confirmReplaceContainer {
+.confirmContainer, .confirmDeleteContainer, .confirmReplaceContainer {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
+	display: none;
+}
+
+.btn-confirm {
 	display: none;
 }
 

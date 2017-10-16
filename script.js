@@ -112,10 +112,11 @@ function TOTALclearLabelClick() {
 }
 
 function deleteLabel() {
-	if ($('#currentLabels option:selected').val()) {
-		$('#maskLabelName').html($('#currentLabels option:selected').val());
-		$('.mask').css('display', 'block');
-		$('.confirmDeleteContainer').css('display', 'block');
+	let selectedLabel = $('#currentLabels option:selected').val();
+	if (selectedLabel) {
+		$('#maskLabelName').html(selectedLabel);
+		$('#maskAction').html("Delete");
+		$('.mask, .confirmContainer, #confirmDeleteLabel').css('display', 'inline-block');
 	} else {
 		updateStatus('Please choose a label to delete.');
 	}
@@ -129,19 +130,16 @@ function confirmDeleteLabel() {
 	chrome.bookmarks.removeTree(id, function() {
 		updateStatus('Deleted ' + label + ".");
 		getAllLabels();
-		$('.mask').css('display', 'none');
-		$('.confirmDeleteContainer').css('display', 'none');
+		$('.mask, .confirmContainer, .btn-confirm').css('display', 'none');
 	});
 }
 
 function replaceLabel() {
-	if ($('#currentLabels option:selected').val()) {
-		// $('#maskLabelName').html($('#currentLabels option:selected').val());
-		$('.maskedText').html("Replace <span id='maskLabelName'>" + 
-			$('#currentLabels option:selected').val() + 
-			"</span> and its content.")
-		$('.mask').css('display', 'block');
-		$('.confirmReplaceContainer').css('display', 'block');
+	let selectedLabel = $('#currentLabels option:selected').val();
+	if (selectedLabel) {
+		$('#maskLabelName').html(selectedLabel);
+		$('#maskAction').html("Replace");
+		$('.mask, .confirmContainer, #confirmReplaceLabel').css('display', 'inline-block');
 	} else {
 		updateStatus('Please choose a label to replace.');
 	}
@@ -162,8 +160,7 @@ function confirmReplaceLabel() {
 				createFolder(function() {
 					updateStatus('Replaced ' + labelName + ".");
 					getAllLabels();
-					$('.mask').css('display', 'none');
-					$('.confirmReplaceContainer').css('display', 'none');
+					$('.mask, .confirmContainer, .btn-confirm').css('display', 'none');
 				}, labelName, tabs, true);
 			});
 		});
@@ -223,7 +220,6 @@ $(document).ready(function() {
 	});
 	$('.mask').click(function() {
 		$('.mask').css('display', 'none');
-		$('.confirmDeleteContainer').css('display', 'none');
-		$('.confirmReplaceContainer').css('display', 'none');
+		$('.confirmDeleteContainer, .confirmReplaceContainer, .btn-confirm').css('display', 'none');
 	});
 });

@@ -46,13 +46,10 @@
       <div class="row" id="status"></div>
     </div>
     <div class="mask">
-      <div class="row confirmDeleteContainer">
-        <p class="maskedText">Delete <span id="maskLabelName"></span> and its contents</p>
-        <button class="btn-red" id="confirmDeleteLabel">Delete label</button>
-      </div>
-      <div class="row confirmReplaceContainer">
-        <p class="maskedText">Replace <span id="maskLabelName"></span> and its contents</p>
-        <button class="btn-yellow" id="confirmReplaceLabel">Replace label</button>
+      <div class="row confirmContainer">
+        <p class="maskedText"><span id="maskAction"></span> <span id="maskLabelName"></span> and its contents</p>
+        <button class="btn-confirm btn-yellow" id="confirmReplaceLabel">Replace label</button>
+        <button class="btn-confirm btn-red" id="confirmDeleteLabel">Delete label</button>
       </div>
     </div>
   </body>
