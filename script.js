@@ -178,4 +178,7 @@ $(document).ready(function() {
 	$('#confirmDeleteLabel').click(function() {
 		confirmDeleteLabel();
 	});
+	$('.mask').click(function() {
+		$('.mask').css('display', 'none');
+	});
 });
