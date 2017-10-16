@@ -39,8 +39,9 @@
         <select id="currentLabels"></select>
       </div>
       <div class="row">
-        <button class="col col-2 btn-green" id="openLabel">Open Label</button>
-        <button class="col col-2 btn-red" id="deleteLabel">Delete Label</button>
+        <button class="col col-3 btn-green" id="openLabel">Open</button>
+        <button class="col col-3 btn-yellow" id="replaceLabel">Replace</button>
+        <button class="col col-3 btn-red" id="deleteLabel">Delete</button>
       </div>
       <div class="row" id="status"></div>
     </div>
@@ -48,6 +49,10 @@
       <div class="row confirmDeleteContainer">
         <p class="maskedText">Delete <span id="maskLabelName"></span> and its contents</p>
         <button class="btn-red" id="confirmDeleteLabel">Delete label</button>
+      </div>
+      <div class="row confirmReplaceContainer">
+        <p class="maskedText">Replace <span id="maskLabelName"></span> and its contents</p>
+        <button class="btn-yellow" id="confirmReplaceLabel">Replace label</button>
       </div>
     </div>
   </body>

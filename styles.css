@@ -30,10 +30,11 @@
 	padding: 2px 6px;
 }
 
-.confirmDeleteContainer {
+.confirmDeleteContainer, .confirmReplaceContainer {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
+	display: none;
 }
 
 #confirmDeleteLabel {
@@ -85,6 +86,18 @@
 	margin-left: 1%;
 }
 
+.col-3 {
+	width: 32%;
+}
+
+.col-3:first-child {
+	margin-right: 2%;
+}
+
+.col-3:last-child {
+	margin-left: 2%;
+}
+
 button {
 	font-size: 18px;
 	border: none;
@@ -99,6 +112,11 @@ button {
 
 .btn-red {
 	background-color: #ff8c8c;
+}
+
+.btn-yellow {
+	background-color: #ffe8a1;
+	/* background-color: #ffeeba; */
 }
 
 #status {

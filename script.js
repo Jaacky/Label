@@ -115,6 +115,7 @@ function deleteLabel() {
 	if ($('#currentLabels option:selected').val()) {
 		$('#maskLabelName').html($('#currentLabels option:selected').val());
 		$('.mask').css('display', 'block');
+		$('.confirmDeleteContainer').css('display', 'block');
 	} else {
 		updateStatus('Please choose a label to delete.');
 	}
@@ -129,8 +130,44 @@ function confirmDeleteLabel() {
 		updateStatus('Deleted ' + label + ".");
 		getAllLabels();
 		$('.mask').css('display', 'none');
+		$('.confirmDeleteContainer').css('display', 'none');
 	});
+}
 
+function replaceLabel() {
+	if ($('#currentLabels option:selected').val()) {
+		// $('#maskLabelName').html($('#currentLabels option:selected').val());
+		$('.maskedText').html("Replace <span id='maskLabelName'>" + 
+			$('#currentLabels option:selected').val() + 
+			"</span> and its content.")
+		$('.mask').css('display', 'block');
+		$('.confirmReplaceContainer').css('display', 'block');
+	} else {
+		updateStatus('Please choose a label to replace.');
+	}
+}
+
+function confirmReplaceLabel() {
+	var labelName = $('#currentLabels option:selected').val();
+	var labelID = $('#currentLabels option:selected').attr('id');
+	var id = labelID.substring(5);
+
+	chrome.bookmarks.removeTree(id, function() {
+		var queryInfo = {
+			currentWindow: true
+		  };
+		  checkLabel(function() {
+			  chrome.tabs.query(queryInfo, function(tabs) {
+				// Get label value
+				createFolder(function() {
+					updateStatus('Replaced ' + labelName + ".");
+					getAllLabels();
+					$('.mask').css('display', 'none');
+					$('.confirmReplaceContainer').css('display', 'none');
+				}, labelName, tabs, true);
+			});
+		});
+	});
 }
 
 function openLabel() {
@@ -175,10 +212,18 @@ $(document).ready(function() {
 	$('#deleteLabel').click(function() {
 		deleteLabel();
 	});
+	$('#replaceLabel').click(function() {
+		replaceLabel();
+	});
 	$('#confirmDeleteLabel').click(function() {
 		confirmDeleteLabel();
 	});
+	$('#confirmReplaceLabel').click(function() {
+		confirmReplaceLabel();
+	});
 	$('.mask').click(function() {
 		$('.mask').css('display', 'none');
+		$('.confirmDeleteContainer').css('display', 'none');
+		$('.confirmReplaceContainer').css('display', 'none');
 	});
 });
