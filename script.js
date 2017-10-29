@@ -1,31 +1,28 @@
-var labelID;
+var LABEL_ID;
 
-function createFolder(_callback, folderName, tabs, labelFlag) {
+function createRoot(_callback) {
+	chrome.bookmarks.create(
+		{ 'title': folderName },
+		(newFolder) => {
+			LABEL_ID = newFolder.id;
+			_callback();
+		}
+	);
+}
 
-	if (labelFlag === undefined) { // labelFlag was not passed and so creating Label folder
-		chrome.bookmarks.create(
-			{'title': folderName},
-			function(newFolder) {
-        labelID = newFolder.id;
-        _callback();
+function createFolder(folderName, tabs, _callback) {
+	chrome.bookmarks.create(
+		{
+			'parentId': LABEL_ID,
+			'title': folderName
+		},
+		(newFolder) => {
+			for (i=0; i < tabs.length; i++) {
+				addBookmark(newFolder, tabs[i]);
 			}
-		);
-	} else { // labelFlag was passed and so create folder with Label folder as parent
-		chrome.bookmarks.create(
-			{
-				'parentId': labelID,
-				'title': folderName
-			},
-			function(newFolder){
-				for (i=0; i < tabs.length; i++) {
-					addBookmark(newFolder, tabs[i]);
-				}
-				_callback();
-			}
-		);
-	}
-
-	// window.console.log(folderName + " folder created");
+			_callback();
+		}
+	);
 }
 
 function addBookmark(labelNode, tab) {
@@ -34,65 +31,69 @@ function addBookmark(labelNode, tab) {
 			'parentId' : labelNode.id,
 			'title' :  tab.title,
 			'url' : tab.url
-		},
-		function() {
-			//console.log(tab.title + " bookmark created!");
 		}
 	);
 }
 
-function checkLabel(callback) {
+function checkLabel(_callback) {
 	chrome.bookmarks.search(
 		{ 'title': "Label", 'url': null },
-		function(result) {
+		(result) => {
 			if (!result.length) {
-				createFolder(callback, "Label");
-        return;
+				createRoot(_callback);
+        		return;
 			}
-			labelID = result[0].id;
-			callback();
+			LABEL_ID = result[0].id;
+			_callback();
 		}
 	);
 }
 
 function getAllLabels() {
-	var labelNames = [];
+	let labelNames = [];
 	$('#currentLabels').empty();
-	chrome.bookmarks.getSubTree(labelID, function(labelTree) {
-		var labelSubFolders = labelTree[0].children;
-    if (labelSubFolders.length == 0) {
-  		$('#currentLabels').append('<option selected value="" disabled>No Labels</option>');
-    } else {
-      $('#currentLabels').append('<option selected value="" disabled>Current Labels</option>');
-      for (i=0; i < labelSubFolders.length; i++) {
-				chrome.bookmarks.get(labelSubFolders[i].id, function(folders) {
-					$('#currentLabels').append('<option class="labelOptions" id="label' + folders[0].id + '" value="' + folders[0].title + '">' + folders[0].title + '</option>')
-				});
-			}
-    }
-	});
+	chrome.bookmarks.getSubTree(LABEL_ID, populateDropdown);
 }
 
-function addLabelClick() {
-	var queryInfo = {
-	    currentWindow: true
-  	};
-  	checkLabel(function() {
-  		chrome.tabs.query(queryInfo, function(tabs) {
-			// Get label value
-			var labelName;
+function populateDropdown(labelTree) {
+	let labelSubFolders = labelTree[0].children;
+	if (labelSubFolders.length == 0) {
+		$('#currentLabels').append(
+			'<option selected value="" disabled>No Labels</option>'
+		);
+	} else {
+		$('#currentLabels').append(
+			'<option selected value="" disabled>Current Labels</option>'
+		);
+		for (i=0; i < labelSubFolders.length; i++) {
+			chrome.bookmarks.get(labelSubFolders[i].id, addToDropdown);
+		}
+	}
+}
+
+function addToDropdown(folders) {
+	let folder = folders[0];
+	let id = 'label' + folder.id;
+	$('#currentLabels').append(
+		'<option class="labelOptions" id="' + id + '" value="' + folder.title + '">' + folder.title + '</option>'
+	); 
+}
+
+function createLabel() {
+	var queryInfo = { currentWindow: true };
+  	checkLabel(() => {
+  		chrome.tabs.query(queryInfo, (tabs) => {
+			let labelName;
 
 			if ($('#labelName').val()) {
 				labelName = $('#labelName').val();
 			} else {
-				var now = new Date();
+				let now = new Date();
 				labelName = now.toLocaleTimeString() + now.toLocaleDateString();
 			}
 			$('#labelName').val("");
-			createFolder(getAllLabels, labelName, tabs, true);
-
+			createFolder(labelName, tabs, getAllLabels);
 			updateStatus("Tabs saved to " + labelName + ".");
-
 		});
   	});
 }
@@ -101,7 +102,7 @@ function addLabelClick() {
   NOT USED, used to completely erase the label folder
 */
 function TOTALclearLabelClick() {
-	chrome.bookmarks.getSubTree(labelID, function(labelTree) {
+	chrome.bookmarks.getSubTree(LABEL_ID, function(labelTree) {
 		var labelSubFolders = labelTree[0].children;
 		for (i=0; i < labelSubFolders.length; i++) {
 			chrome.bookmarks.removeTree(labelSubFolders[i].id);
@@ -111,35 +112,19 @@ function TOTALclearLabelClick() {
 	updateStatus('Removed all label bookmarks');
 }
 
-function confirmDeleteLabel() {
-	var label = $('#currentLabels option:selected').val();
-	var labelID = $('#currentLabels option:selected').attr('id');
-	var id = labelID.substring(5);
-
-	chrome.bookmarks.removeTree(id, function() {
-		updateStatus('Deleted ' + label + ".");
-		getAllLabels();
-		$('.mask, .confirmContainer, .btn-confirm').css('display', 'none');
+function deleteLabel(id, labelName) {
+	chrome.bookmarks.removeTree(id, () => {
+		postAction("Delete", labelName);
 	});
 }
 
-function confirmUpdateLabel() {
-	var labelName = $('#currentLabels option:selected').val();
-	var labelID = $('#currentLabels option:selected').attr('id');
-	var id = labelID.substring(5);
-
-	chrome.bookmarks.removeTree(id, function() {
-		var queryInfo = {
-			currentWindow: true
-		  };
-		  checkLabel(function() {
-			  chrome.tabs.query(queryInfo, function(tabs) {
-				// Get label value
-				createFolder(function() {
-					updateStatus('Updated ' + labelName + ".");
-					getAllLabels();
-					$('.mask, .confirmContainer, .btn-confirm').css('display', 'none');
-				}, labelName, tabs, true);
+function updateLabel(id, labelName) {
+	chrome.bookmarks.removeTree(id, () => {
+		let queryInfo = { currentWindow: true };
+		checkLabel(() => {
+			chrome.tabs.query(queryInfo, (tabs) => {
+				createFolder(labelName, tabs, () => {
+					postAction("Update", labelName); });
 			});
 		});
 	});
@@ -157,30 +142,36 @@ function getConfirmation(action) {
 	}
 }
 
+function confirmAction(action) {
+	let labelName = $('#currentLabels option:selected').val();
+	let labelID = $('#currentLabels option:selected').attr('id');
+	let id = labelID.substring(5);
+
+	action(id, labelName);
+}
+
+function postAction(action, labelName) {
+	updateStatus(action + 'd ' + labelName + ".");
+	getAllLabels();
+	$('.mask, .confirmContainer, .btn-confirm').css('display', 'none');
+}
+
 function openLabel() {
 	if ($('#currentLabels option:selected').val()) {
-		var label = $('#currentLabels option:selected').val();
-		var labelID = $('#currentLabels option:selected').attr('id');
-		var id = labelID.substring(5);
+		let label = $('#currentLabels option:selected').val();
+		let labelID = $('#currentLabels option:selected').attr('id');
+		let id = labelID.substring(5);
 
-		chrome.bookmarks.getChildren(id, function(result) {
-			var tabs = []
-			for (var i=0; i<result.length; i++) {
+		chrome.bookmarks.getChildren(id, (result) => {
+			let tabs = []
+			for (let i=0; i<result.length; i++) {
 				tabs.push(result[i].url);
 			}
-			chrome.windows.create({url : tabs});
+			chrome.windows.create({ url : tabs });
 		});
 	} else {
 		updateStatus('Please choose a label to open.');
 	}
-}
-
-function findLabel(id, label) {
-	chrome.bookmarks.getChildren(id,
-		function(result) {
-			// console.log('Result length: ' + result.length);
-			chrome.windows.create();
-	});
 }
 
 function updateStatus(string) {
@@ -190,8 +181,8 @@ function updateStatus(string) {
 $(document).ready(function() {
 	checkLabel(getAllLabels);
 
-	$('#addLabelButton').click(function() {
-		addLabelClick();
+	$('#createLabel').click(function() {
+		createLabel();
 	});
 	$('#openLabel').click(function() {
 		openLabel();
@@ -203,10 +194,10 @@ $(document).ready(function() {
 		getConfirmation("Update");
 	});
 	$('#confirmDeleteLabel').click(function() {
-		confirmDeleteLabel();
+		confirmAction(deleteLabel);
 	});
 	$('#confirmUpdateLabel').click(function() {
-		confirmUpdateLabel();
+		confirmAction(updateLabel);
 	});
 	$('.mask').click(function() {
 		$('.mask').css('display', 'none');
