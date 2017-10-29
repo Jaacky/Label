@@ -5,7 +5,7 @@
 
   "name": "Label",
   "description": "Extension to save all the open tabs in your window for a later time",
-  "version": "2.1.2",
+  "version": "3.0.0",
 
   "browser_action": {
     "default_icon": "Label-Icon-128-v2.png",
