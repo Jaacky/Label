@@ -1,4 +1,5 @@
-var LABEL_ID;
+let LABEL_ID;
+const labelIdPrefix = 'label';
 
 function createRoot(_callback) {
 	chrome.bookmarks.create(
@@ -73,7 +74,7 @@ function populateDropdown(labelTree) {
 
 function addToDropdown(folders) {
 	let folder = folders[0];
-	let id = 'label' + folder.id;
+	let id = labelIdPrefix + folder.id;
 	$('#currentLabels').append(
 		'<option class="labelOptions" id="' + id + '" value="' + folder.title + '">' + folder.title + '</option>'
 	); 
@@ -145,7 +146,7 @@ function getConfirmation(action) {
 function confirmAction(action) {
 	let labelName = $('#currentLabels option:selected').val();
 	let labelID = $('#currentLabels option:selected').attr('id');
-	let id = labelID.substring(5);
+	let id = labelID.substring(labelIdPrefix.length);
 
 	action(id, labelName);
 }
@@ -160,7 +161,7 @@ function openLabel() {
 	if ($('#currentLabels option:selected').val()) {
 		let label = $('#currentLabels option:selected').val();
 		let labelID = $('#currentLabels option:selected').attr('id');
-		let id = labelID.substring(5);
+		let id = labelID.substring(labelIdPrefix.length);
 
 		chrome.bookmarks.getChildren(id, (result) => {
 			let tabs = []
