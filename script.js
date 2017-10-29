@@ -111,17 +111,6 @@ function TOTALclearLabelClick() {
 	updateStatus('Removed all label bookmarks');
 }
 
-function deleteLabel() {
-	let selectedLabel = $('#currentLabels option:selected').val();
-	if (selectedLabel) {
-		$('#maskLabelName').html(selectedLabel);
-		$('#maskAction').html("Delete");
-		$('.mask, .confirmContainer, #confirmDeleteLabel').css('display', 'inline-block');
-	} else {
-		updateStatus('Please choose a label to delete.');
-	}
-}
-
 function confirmDeleteLabel() {
 	var label = $('#currentLabels option:selected').val();
 	var labelID = $('#currentLabels option:selected').attr('id');
@@ -134,18 +123,7 @@ function confirmDeleteLabel() {
 	});
 }
 
-function replaceLabel() {
-	let selectedLabel = $('#currentLabels option:selected').val();
-	if (selectedLabel) {
-		$('#maskLabelName').html(selectedLabel);
-		$('#maskAction').html("Replace");
-		$('.mask, .confirmContainer, #confirmReplaceLabel').css('display', 'inline-block');
-	} else {
-		updateStatus('Please choose a label to replace.');
-	}
-}
-
-function confirmReplaceLabel() {
+function confirmUpdateLabel() {
 	var labelName = $('#currentLabels option:selected').val();
 	var labelID = $('#currentLabels option:selected').attr('id');
 	var id = labelID.substring(5);
@@ -158,13 +136,25 @@ function confirmReplaceLabel() {
 			  chrome.tabs.query(queryInfo, function(tabs) {
 				// Get label value
 				createFolder(function() {
-					updateStatus('Replaced ' + labelName + ".");
+					updateStatus('Updated ' + labelName + ".");
 					getAllLabels();
 					$('.mask, .confirmContainer, .btn-confirm').css('display', 'none');
 				}, labelName, tabs, true);
 			});
 		});
 	});
+}
+
+function getConfirmation(action) {
+	let selectedLabel = $('#currentLabels option:selected').val();
+	let toDisplay = '.mask, .confirmContainer, #confirm' + action + 'Label';
+	if (selectedLabel) {
+		$('#maskLabelName').html(selectedLabel);
+		$('#maskAction').html(action);
+		$(toDisplay).css('display', 'inline-block');
+	} else {
+		updateStatus('Please choose a label to ' + action.toLowerCase() + '.');
+	}
 }
 
 function openLabel() {
@@ -207,16 +197,16 @@ $(document).ready(function() {
 		openLabel();
 	});
 	$('#deleteLabel').click(function() {
-		deleteLabel();
+		getConfirmation("Delete");
 	});
-	$('#replaceLabel').click(function() {
-		replaceLabel();
+	$('#updateLabel').click(function() {
+		getConfirmation("Update");
 	});
 	$('#confirmDeleteLabel').click(function() {
 		confirmDeleteLabel();
 	});
-	$('#confirmReplaceLabel').click(function() {
-		confirmReplaceLabel();
+	$('#confirmUpdateLabel').click(function() {
+		confirmUpdateLabel();
 	});
 	$('.mask').click(function() {
 		$('.mask').css('display', 'none');
