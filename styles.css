@@ -1,10 +1,18 @@
-/*
-	NEW COLOURS: DARK GREEN 2D4000
-							INNER GREEN 97D700
-*/
+@font-face {
+    font-family: 'Futura Thin';
+    src: url('./fonts/Futura_Thin.ttf');
+}
+
 * {
 	margin: 0;
 	padding: 0;
+	font-family: Futura Thin;
+}
+
+.divider {
+	margin-top: 15px;
+	padding-top: 10px;
+	border-top: 1px solid #c8c8c8;
 }
 
 .mask {
@@ -21,13 +29,19 @@
 .maskedText {
 	color: white;
 	font-size: 16px;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
+	padding: 5px 15px;
 }
 
 #maskLabelName {
 	border: 1px solid white;
-	border-radius: 5px;
-	padding: 2px 6px;
+	border-radius: 1px;
+	padding: 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 200px;
+	display: inline-block;
+	margin-top: 3px;
 }
 
 .confirmContainer, .confirmDeleteContainer, .confirmReplaceContainer {
@@ -37,31 +51,9 @@
 	display: none;
 }
 
-.btn-confirm {
-	display: none;
-}
-
-#confirmDeleteLabel {
-	/*position: relative;
-	top: 50%;
-	transform: translateY(-50%);*/
-}
-
 .popup {
 	padding: 5px;
 }
-
-/*
-	Light green: bfff8c
-	Dark green: #6fbf30
-	Red: #ff8c8c;
-
-	NEW COLOURS:
-	light green: #b2ff59
-	dark green: #c0dfd9;
-	dark: #3b3a36;
-	deep orange: #ff5722;
-*/
 
 .row {
 	width: 100%;
@@ -105,7 +97,7 @@
 button {
 	font-size: 18px;
 	border: none;
-	border-radius: 5px;
+	border-radius: 2px;
 	background-color: #b2ff59;
 	padding: 5px;
 }
@@ -123,13 +115,17 @@ button {
 	/* background-color: #ffeeba; */
 }
 
+.btn-confirm {
+	display: none;
+}
+
 #status {
 	/* avoid an excessively wide status text */
 	white-space: pre;
 	text-overflow: ellipsis;
-	min-width: 250px;
-	max-width: 400px;
+	width: 250px;
 	font-size: 12px;
+	overflow: hidden;
 }
 
 #labelNameContainer {
@@ -167,13 +163,12 @@ button {
 	font-size: 18px;
 	border-radius: 5px;
 	border: none;
-	padding: 6px; /* 1 extra padding for missing border */
+	padding: 6px 6px 7px 5px;
 	width: 15%;
 	display: inline-block;
 
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
-	/*border: 1px solid #ccc;*/
 	line-height: 1;
 }
 
@@ -182,10 +177,4 @@ button {
 	font-size: 20px;
 	line-height:40px;
 	height: 40px;
-}
-
-.divider {
-	margin-top: 15px;
-	padding-top: 10px;
-	border-top: 1px solid #c8c8c8;
 }
