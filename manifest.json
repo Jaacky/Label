@@ -1,34 +1,33 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 
-  "name": "Label",
-  "description": "Extension to save all the open tabs in your window for a later time",
-  "version": "3.0.0",
+    "name": "Label",
+    "description": "Extension to save all the open tabs in your window for a later time",
+    "version": "3.0.0",
 
-  "browser_action": {
-    "default_icon": "Label-Icon-128-v2.png",
-    "default_popup": "popup.html",
-    "default_title": "Label"
-  },
+    "browser_action": {
+        "default_icon": "Label-Icon-128-v2.png",
+        "default_popup": "popup.html",
+        "default_title": "Label"
+    },
 
-  "background": {
-    "scripts": []
-  },
+    "background": {
+        "scripts": []
+    },
 
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["jquery.js", "script.js"]
-    }
-  ],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["jquery.js", "script.js"]
+        }
+    ] ,
 
-  "permissions": [
-    "activeTab",
-    "tabs",
-    "bookmarks",
-    "https://ajax.googleapis.com/"
-  ]
-
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "bookmarks",
+        "https://ajax.googleapis.com/"
+    ]
 }
