@@ -4,6 +4,7 @@ const HtmlWebpackExcludeAssetsPlugin = require("html-webpack-exclude-assets-plug
 module.exports = {
     entry: {
         label: "./src/label/index.jsx",
+        background: "./src/background_scripts/background.js",
         content: "./src/content_scripts/toggle_label.jsx"
     },
     output: {
@@ -25,7 +26,10 @@ module.exports = {
         new HtmlWebPackPlugin({
             template: "./src/static/index.html",
             filename: "index.html",
-            excludeAssets: [/content.*.js/] // Excluding content scripts
+            excludeAssets: [
+                /content.*.js/, // Excluding content scripts
+                /background.*.js/ // Excluding background scripts
+            ] 
         }),
         new HtmlWebpackExcludeAssetsPlugin()
     ]
