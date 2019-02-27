@@ -8,27 +8,33 @@
   "version": "3.0.0",
 
   "browser_action": {
-    "default_icon": "Label-Icon-128-v2.png",
-    "default_popup": "popup.html",
     "default_title": "Label"
   },
 
   "background": {
-    "scripts": []
+    "scripts": ["background.js"]
   },
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["jquery.js", "script.js"]
+      "js": ["label.js"]
     }
   ],
+
+  "commands": {
+    "toggleLabel": {
+        "suggested_key": {
+            "default": "Ctrl+Shift+L"
+        },
+        "description": "Toggle Label"
+    }
+  },
 
   "permissions": [
     "activeTab",
     "tabs",
-    "bookmarks",
-    "https://ajax.googleapis.com/"
+    "bookmarks"
   ]
 
 }
