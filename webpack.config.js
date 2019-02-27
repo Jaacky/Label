@@ -1,3 +1,4 @@
+const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const HtmlWebpackExcludeAssetsPlugin = require("html-webpack-exclude-assets-plugin");
 
@@ -23,6 +24,11 @@ module.exports = {
         ]
     },
     plugins: [
+        new GenerateJsonPlugin('manifest.json',
+            require('./manifest.json'),
+            null,
+            4
+        ),
         new HtmlWebPackPlugin({
             template: "./src/static/index.html",
             filename: "index.html",
