@@ -1,6 +1,7 @@
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const HtmlWebpackExcludeAssetsPlugin = require("html-webpack-exclude-assets-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
@@ -14,6 +15,16 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.(sc|c)ss$/,
+                exclude: /node_modules/,
+                loaders: [
+                    // "style-loader",
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "sass-loader"
+                ]
+            },
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
@@ -37,6 +48,9 @@ module.exports = {
                 /background.*.js/ // Excluding background scripts
             ] 
         }),
-        new HtmlWebpackExcludeAssetsPlugin()
+        new HtmlWebpackExcludeAssetsPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name].css"
+        })
     ]
 };
