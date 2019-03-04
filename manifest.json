@@ -35,6 +35,10 @@
     "activeTab",
     "tabs",
     "bookmarks"
+  ],
+
+  "web_accessible_resources": [
+    "/label.css"
   ]
 
 }
