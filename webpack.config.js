@@ -21,7 +21,12 @@ module.exports = {
                 loaders: [
                     // "style-loader",
                     MiniCssExtractPlugin.loader,
-                    "css-loader",
+                    {
+                        loader: "css-loader",
+                        options: {
+                            modules: true,
+                        },
+                    },
                     "sass-loader"
                 ]
             },

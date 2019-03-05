@@ -1,8 +1,9 @@
+$color-sassy: #cc4397;
+
 .app {
     background-color: lightcoral;
     color: white;
+    .sassyDiv {
+        color: $color-sassy;
+    }
 }
-
-// div {
-//     background-color: lightseagreen;
-// }

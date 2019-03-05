@@ -10,7 +10,7 @@ class Label extends React.Component {
     render() {
         return (
             <Frame head={[<link type="text/css" rel="stylesheet" href={chrome.runtime.getURL("./label.css")}></link>]}> 
-                <div className="app">Hellooo</div>
+                <div>Hellooo</div>
                 <Main/>
             </Frame>
         )

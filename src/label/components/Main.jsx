@@ -1,16 +1,18 @@
 import React from 'react';
 
-// import style from '../../scss/label.scss';
+import style from '../../scss/label.scss';
 
 export default class Main extends React.Component {
     render() {
-        // console.log(style);
+        console.log(style);
         return (
-            <div style={{"background-color": "lightgreen"}}>
+            <div className={style.sassyDiv}>
                 Inside main
-                {/* {style} */}
                 test
                 {/* {style.toString()} */}
+                <div className={style.app}>
+                    Hello world
+                </div>
             </div>
         )
     }
