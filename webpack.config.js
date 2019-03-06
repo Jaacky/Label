@@ -2,6 +2,7 @@ const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const HtmlWebpackExcludeAssetsPlugin = require("html-webpack-exclude-assets-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const postcssPresetEnv = require('postcss-preset-env');
 
 module.exports = {
     entry: {
@@ -27,6 +28,15 @@ module.exports = {
                         options: {
                             modules: true,
                         },
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            ident: 'postcss',
+                            plugins: () => [
+                                postcssPresetEnv()
+                            ]
+                        }
                     },
                     "sass-loader"
                 ]
