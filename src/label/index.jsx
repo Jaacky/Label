@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Frame from 'react-frame-component';
 
-// import style from '../scss/label.scss';
+import style from '../scss/content.scss';
 
 import Main from './components/Main.jsx';
 
@@ -18,7 +18,7 @@ class Label extends React.Component {
 }
 
 const app = document.createElement('div');
-app.id = "label-root";
+app.id = style['label-root'];
 
 document.body.appendChild(app);
 ReactDOM.render(<Label/>, app);

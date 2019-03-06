@@ -18,7 +18,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["label.js"]
+      "js": ["label.js"],
+      "css": ["content.css"]
     }
   ],
 

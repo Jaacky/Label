@@ -7,7 +7,8 @@ module.exports = {
     entry: {
         label: "./src/label/index.jsx",
         background: "./src/background_scripts/background.js",
-        content: "./src/content_scripts/toggle_label.jsx"
+        content: "./src/content_scripts/toggle_label.jsx",
+        content: "./src/scss/content.scss",
     },
     output: {
         path: `${__dirname}/build`,

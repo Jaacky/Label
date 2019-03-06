@@ -6,7 +6,7 @@ export default class Main extends React.Component {
     render() {
         console.log(style);
         return (
-            <div className={style.sassyDiv}>
+            <div className={style.label}>
                 Inside main
                 test
                 {/* {style.toString()} */}

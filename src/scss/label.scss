@@ -7,3 +7,13 @@ $color-sassy: #cc4397;
         color: $color-sassy;
     }
 }
+
+.label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    padding: 18px;
+    background-color: white;
+}
